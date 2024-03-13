@@ -8,10 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerController = exports.loginController = void 0;
 const token_1 = require("../utils/token");
 const client_1 = require("@prisma/client");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const prisma = new client_1.PrismaClient();
 const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
@@ -54,7 +58,7 @@ const registerController = (req, res) => __awaiter(void 0, void 0, void 0, funct
             data: {
                 email: user.email,
                 username: user.username,
-                password: user.password,
+                password: bcrypt_1.default.hashSync(user.password, 10),
                 name: user.name,
             },
         });

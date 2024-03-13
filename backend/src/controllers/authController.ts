@@ -1,6 +1,7 @@
 import { createAccessToken, verifyPassword } from "../utils/token";
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -40,15 +41,16 @@ const registerController = async (req: Request, res: Response) => {
     if (emailExists) {
       return res.status(400).json("Email already exists");
     }
+    
     await prisma.user.create({
       data: {
         email: user.email,
         username: user.username,
-        password: user.password,
+        password: bcrypt.hashSync(user.password, 10),
         name: user.name,
       },
     });
-    res.json(user);
+  res.json("User created successfully");
   } catch (error) {
     res.status(500).json("Internal Server Error");
   }

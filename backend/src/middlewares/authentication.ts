@@ -1,4 +1,3 @@
-import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 
 export const authentication = async (req: any, res: any, next: any) => {
